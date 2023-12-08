@@ -7,7 +7,7 @@ namespace educacao_financeira_api.Model
         {
             public string Nome { get; set; } = null!;
             public string Cpf { get; set; } = null!;
-            public DateTime Nascimento { get; set; }
+            public DateTime? Nascimento { get; set; }
             public string Endereco { get; set; } = null!;
             public string Email { get; set; }
             public string CpfResponsavel { get; set; } = null!;

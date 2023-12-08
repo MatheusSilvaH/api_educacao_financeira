@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projetos\\educacao-financeira-api\\educacao-financeira-api.csproj": {}
+    "C:\\Projetos\\educacao_financeira_api\\educacao-financeira-api.csproj": {}
   },
   "projects": {
-    "C:\\Projetos\\educacao-financeira-api\\educacao-financeira-api.csproj": {
+    "C:\\Projetos\\educacao_financeira_api\\educacao-financeira-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projetos\\educacao-financeira-api\\educacao-financeira-api.csproj",
+        "projectUniqueName": "C:\\Projetos\\educacao_financeira_api\\educacao-financeira-api.csproj",
         "projectName": "educacao-financeira-api",
-        "projectPath": "C:\\Projetos\\educacao-financeira-api\\educacao-financeira-api.csproj",
+        "projectPath": "C:\\Projetos\\educacao_financeira_api\\educacao-financeira-api.csproj",
         "packagesPath": "C:\\Users\\matheush\\.nuget\\packages\\",
-        "outputPath": "C:\\Projetos\\educacao-financeira-api\\obj\\",
+        "outputPath": "C:\\Projetos\\educacao_financeira_api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\matheush\\AppData\\Roaming\\NuGet\\NuGet.Config",

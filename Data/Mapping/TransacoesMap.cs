@@ -15,8 +15,8 @@ namespace educacao_financeira_api.Data.Mapping
             builder.Property(p => p.ContaOrigemId).IsRequired();
             builder.Property(p => p.ContaDestinoId).IsRequired();
 
-            builder.HasOne(p => p.ContaOrigem).WithMany().HasForeignKey(p => p.ContaOrigemId).IsRequired();
-            builder.HasOne(p => p.ContaDestino).WithMany().HasForeignKey(p => p.ContaDestinoId).IsRequired();
+            builder.HasOne(p => p.ContaOrigem).WithMany(p => p.Transacoes).HasForeignKey(p => p.ContaOrigemId).OnDelete(DeleteBehavior.NoAction).IsRequired();
+            builder.HasOne(p => p.ContaDestino).WithMany().HasForeignKey(p => p.ContaDestinoId).OnDelete(DeleteBehavior.NoAction).IsRequired();
         }
         
     }

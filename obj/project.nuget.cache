@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "d2EhRZS5BGzrHiOjsoU/cFrG9mEtKkvFd7YIc+XomZiAmJTTDkkpQwRaG350N0RK7Vph8PlIEqJQq4ainjIMSA==",
+  "dgSpecHash": "xWw4lPdegqUdBxr/xHnQAkPewIxPZKQ9Eev7HN9oPZYAZcLgL//ZZxBK/qPCR3XNGqxwJ4QB8LzgBGVtsi8Daw==",
   "success": true,
-  "projectFilePath": "C:\\Projetos\\educacao-financeira-api\\educacao-financeira-api.csproj",
+  "projectFilePath": "C:\\Projetos\\educacao_financeira_api\\educacao-financeira-api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matheush\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\matheush\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

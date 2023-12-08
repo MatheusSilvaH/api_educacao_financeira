@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection;
 
-namespace Antifraude.Infra.Data.Context
+namespace educacao_financeira_api.Data.Context
 {
     public class DatabaseContext : DbContext
     {

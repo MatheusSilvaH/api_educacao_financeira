@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using educacao_financeira_api.Data;
+using educacao_financeira_api.Data.Context;
 
 #nullable disable
 
 namespace educacao_financeira_api.Migrations
 {
-    [DbContext(typeof(UsuarioContext))]
-    [Migration("20231207205713_InitialMigration")]
-    partial class InitialMigration
+    [DbContext(typeof(DatabaseContext))]
+    [Migration("20231208014940_AddTables")]
+    partial class AddTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,15 +49,14 @@ namespace educacao_financeira_api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UsuarioId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId")
-                        .IsUnique()
-                        .HasFilter("[UsuarioId] IS NOT NULL");
+                    b.HasIndex("UsuarioId");
 
-                    b.ToTable("Contas");
+                    b.ToTable("Contas", (string)null);
                 });
 
             modelBuilder.Entity("educacao_financeira_api.Model.Transacoes", b =>
@@ -70,12 +69,11 @@ namespace educacao_financeira_api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("ContaDestinoId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ContaOrigemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ContasId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -95,9 +93,11 @@ namespace educacao_financeira_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContasId");
+                    b.HasIndex("ContaDestinoId");
 
-                    b.ToTable("Transacoes");
+                    b.HasIndex("ContaOrigemId");
+
+                    b.ToTable("Transacoes", (string)null);
                 });
 
             modelBuilder.Entity("educacao_financeira_api.Model.Usuario", b =>
@@ -109,15 +109,15 @@ namespace educacao_financeira_api.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ContaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Cpf")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
-                    b.Property<string>("Cpf_responsavel")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("CpfResponsavel")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -126,25 +126,28 @@ namespace educacao_financeira_api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Nascimento")
+                    b.Property<DateTime?>("Nascimento")
+                        .HasMaxLength(8)
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nome_responsavel")
+                    b.Property<string>("NomeResponsavel")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Telefone_responsavel")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("TelefoneResponsavel")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -154,33 +157,45 @@ namespace educacao_financeira_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuario", (string)null);
                 });
 
             modelBuilder.Entity("educacao_financeira_api.Model.Contas", b =>
                 {
                     b.HasOne("educacao_financeira_api.Model.Usuario", "Usuario")
-                        .WithOne("Contas")
-                        .HasForeignKey("educacao_financeira_api.Model.Contas", "UsuarioId");
+                        .WithMany("Contas")
+                        .HasForeignKey("UsuarioId");
 
                     b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("educacao_financeira_api.Model.Transacoes", b =>
                 {
-                    b.HasOne("educacao_financeira_api.Model.Contas", "Contas")
+                    b.HasOne("educacao_financeira_api.Model.Contas", "ContaDestino")
                         .WithMany()
-                        .HasForeignKey("ContasId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ContaDestinoId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Contas");
+                    b.HasOne("educacao_financeira_api.Model.Contas", "ContaOrigem")
+                        .WithMany("Transacoes")
+                        .HasForeignKey("ContaOrigemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ContaDestino");
+
+                    b.Navigation("ContaOrigem");
+                });
+
+            modelBuilder.Entity("educacao_financeira_api.Model.Contas", b =>
+                {
+                    b.Navigation("Transacoes");
                 });
 
             modelBuilder.Entity("educacao_financeira_api.Model.Usuario", b =>
                 {
-                    b.Navigation("Contas")
-                        .IsRequired();
+                    b.Navigation("Contas");
                 });
 #pragma warning restore 612, 618
         }

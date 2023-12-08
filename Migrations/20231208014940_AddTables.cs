@@ -5,24 +5,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace educacao_financeira_api.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class AddTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Usuario",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Nascimento = table.Column<DateTime>(type: "datetime2", maxLength: 8, nullable: true),
                     Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cpf_responsavel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nome_responsavel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefone_responsavel = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContaId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CpfResponsavel = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    NomeResponsavel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TelefoneResponsavel = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -31,7 +30,7 @@ namespace educacao_financeira_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.Id);
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,7 +39,7 @@ namespace educacao_financeira_api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -51,9 +50,9 @@ namespace educacao_financeira_api.Migrations
                 {
                     table.PrimaryKey("PK_Contas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contas_Usuarios_UsuarioId",
+                        name: "FK_Contas_Usuario_UsuarioId",
                         column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        principalTable: "Usuario",
                         principalColumn: "Id");
                 });
 
@@ -63,9 +62,8 @@ namespace educacao_financeira_api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ContaOrigemId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ContaDestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ContasId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContaOrigemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContaDestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -76,24 +74,31 @@ namespace educacao_financeira_api.Migrations
                 {
                     table.PrimaryKey("PK_Transacoes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transacoes_Contas_ContasId",
-                        column: x => x.ContasId,
+                        name: "FK_Transacoes_Contas_ContaDestinoId",
+                        column: x => x.ContaDestinoId,
                         principalTable: "Contas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Transacoes_Contas_ContaOrigemId",
+                        column: x => x.ContaOrigemId,
+                        principalTable: "Contas",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contas_UsuarioId",
                 table: "Contas",
-                column: "UsuarioId",
-                unique: true,
-                filter: "[UsuarioId] IS NOT NULL");
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transacoes_ContasId",
+                name: "IX_Transacoes_ContaDestinoId",
                 table: "Transacoes",
-                column: "ContasId");
+                column: "ContaDestinoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transacoes_ContaOrigemId",
+                table: "Transacoes",
+                column: "ContaOrigemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -105,7 +110,7 @@ namespace educacao_financeira_api.Migrations
                 name: "Contas");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Usuario");
         }
     }
 }
